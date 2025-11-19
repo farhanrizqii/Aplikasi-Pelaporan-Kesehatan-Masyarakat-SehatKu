@@ -20,10 +20,10 @@ Sebelum menjalankan proyek ini, pastikan sistem Anda memiliki komponen berikut y
 
 Ikuti langkah-langkah di bawah ini untuk mendapatkan salinan proyek yang berfungsi di mesin lokal Anda.
 
-### 1. Kloning Repositori
-
 Buka Terminal atau Command Prompt Anda dan *clone* repositori ini:
 ```bash
+### 1. Kloning Repositori
+
 git clone [https://github.com/farhanrizqii/Aplikasi-Pelaporan-Kesehatan-Masyarakat-SehatKu.git](https://github.com/farhanrizqii/Aplikasi-Pelaporan-Kesehatan-Masyarakat-SehatKu.git)
 cd Aplikasi-Pelaporan-Kesehatan-Masyarakat-SehatKu
 
