@@ -441,7 +441,7 @@
                                             <td class="whitespace-nowrap text-center">{{ $index + $penduduks->firstItem() }}</td>
                                             
                                             <td class="whitespace-nowrap">
-                                                <div class="font-bold text-base text-gray-900 dark:text-gray-50 mb-1">
+                                                <div class="whitespace-nowrap font-medium text-gray-800 dark:text-gray-100;">
                                                     {{ $penduduk->nama_lengkap }}
                                                 </div>
                                                 <div class="text-sm text-gray-500 dark:text-gray-400">

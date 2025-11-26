@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Daftar - SehatKu</title>
 
+     <!-- Favicon SehatKu - TAMBAHKAN DI SINI -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%230066FF'/%3E%3Cstop offset='100%25' style='stop-color:%230052CC'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='url(%23grad)'/%3E%3Cpath d='M50 75L30 55C25 50 25 42 30 37C35 32 43 32 48 37L50 39L52 37C57 32 65 32 70 37C75 42 75 50 70 55L50 75Z' fill='white'/%3E%3Cpath d='M30 45L35 50L40 40L45 55L50 45L55 50L60 45L65 50L70 45' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     

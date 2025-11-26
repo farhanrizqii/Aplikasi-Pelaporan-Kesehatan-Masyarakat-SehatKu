@@ -456,7 +456,7 @@
                                             <td class="whitespace-nowrap text-center">{{ $index + $imunisasis->firstItem() }}</td>
                                             
                                             <td class="whitespace-nowrap">
-                                                <div class="font-semibold text-base text-gray-800 dark:text-gray-100">
+                                                <div class="whitespace-nowrap font-medium text-gray-800 dark:text-gray-100;">
                                                     {{ $imunisasi->penduduk->nama_lengkap ?? 'N/A' }}
                                                 </div>
                                             </td>

@@ -127,6 +127,10 @@ Route::middleware('auth')->group(function () {
             'destroy' => 'ibuhamil.destroy',
         ]);
 
+        // --- ROUTE EKSPOR RIWAYAT KESEHATAN HARUS DI ATAS RESOURCE ---
+        Route::get('riwayat-kesehatan/export', [RiwayatKesehatanController::class, 'export'])
+            ->name('riwayat-kesehatan.export');
+
         // Riwayat Kesehatan Individu
         Route::resource('riwayat-kesehatan', RiwayatKesehatanController::class)
             ->names(['index' => 'riwayat-kesehatan.index']);

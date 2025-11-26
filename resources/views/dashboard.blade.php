@@ -45,6 +45,16 @@
             box-shadow: 0 15px 35px rgba(0, 123, 255, 0.12);
         }
 
+        /* Tinggi chart yang lebih optimal */
+        #topPenyakitChart {
+            max-height: 350px !important;
+            min-height: 300px;
+        }
+
+        #jenisKelaminChart {
+            max-height: 280px !important;
+        }
+
         /* Section Aksi Cepat */
         .quick-action-section {
             background: linear-gradient(135deg, #f0f4ff 0%, #e0e9ff 100%);
@@ -153,6 +163,31 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Empty state styling */
+        .empty-chart-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1rem;
+            color: #6b7280;
+        }
+
+        .empty-chart-state svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            #topPenyakitChart {
+                max-height: 400px !important;
+                min-height: 350px;
+            }
+        }
     </style>
 
     <div class="py-6 sm:py-12">
@@ -186,15 +221,21 @@
 
                 <div class="chart-card p-6 col-span-1">
                     <h3 class="chart-title text-gray-700 dark:text-gray-200">Distribusi Jenis Kelamin</h3>
-                    <canvas id="jenisKelaminChart" class="max-h-72"></canvas>
+                    <canvas id="jenisKelaminChart"></canvas>
                 </div>
                 
                 <div class="chart-card p-6 col-span-1 lg:col-span-2">
                     <h3 class="chart-title text-gray-700 dark:text-gray-200">Top 5 Kasus Penyakit (Bulan Terakhir)</h3>
-                    <canvas id="topPenyakitChart" class="max-h-72"></canvas>
-                    
-                    @if (count($topPenyakitLabels) == 0)
-                        <p class="text-center text-gray-500 mt-6">Belum ada data riwayat penyakit yang tercatat di bulan ini.</p>
+                    @if (count($topPenyakitLabels) > 0)
+                        <canvas id="topPenyakitChart"></canvas>
+                    @else
+                        <div class="empty-chart-state">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <p class="text-center font-semibold">Belum Ada Data</p>
+                            <p class="text-center text-sm mt-1">Belum ada riwayat penyakit yang tercatat di bulan ini.</p>
+                        </div>
                     @endif
                 </div>
             </div>
@@ -229,21 +270,53 @@
                 datasets: [{
                     data: jkData,
                     backgroundColor: ['#4F46E5', '#EC4899'],
+                    borderColor: ['#4338CA', '#DB2777'],
+                    borderWidth: 2,
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'bottom' },
-                    title: { display: false }
+                    legend: { 
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 12,
+                                weight: '600'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                let value = context.parsed;
+                                let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                let percentage = ((value / total) * 100).toFixed(1);
+                                return label + ': ' + value + ' (' + percentage + '%)';
+                            }
+                        }
+                    }
                 }
             }
         });
 
-        // --- LOGIC CHART 2: TOP PENYAKIT ---
+        // --- LOGIC CHART 2: TOP PENYAKIT (HORIZONTAL BAR CHART) ---
         const tpLabels = {!! json_encode($topPenyakitLabels) !!};
         const tpData = {!! json_encode($topPenyakitData) !!};
 
+        @if(count($topPenyakitLabels) > 0)
         new Chart(document.getElementById('topPenyakitChart'), {
             type: 'bar',
             data: {
@@ -251,20 +324,99 @@
                 datasets: [{
                     label: 'Total Kasus',
                     data: tpData,
-                    backgroundColor: '#EF4444', 
-                    borderColor: '#B91C1C',
-                    borderWidth: 1
+                    backgroundColor: [
+                        'rgba(239, 68, 68, 0.8)',   // Red
+                        'rgba(245, 158, 11, 0.8)',  // Amber
+                        'rgba(16, 185, 129, 0.8)',  // Green
+                        'rgba(59, 130, 246, 0.8)',  // Blue
+                        'rgba(139, 92, 246, 0.8)'   // Purple
+                    ],
+                    borderColor: [
+                        '#EF4444',
+                        '#F59E0B',
+                        '#10B981',
+                        '#3B82F6',
+                        '#8B5CF6'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 8
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y', // Horizontal bar chart
                 scales: { 
-                    y: { beginAtZero: true } 
+                    x: { 
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            font: {
+                                size: 11,
+                                weight: '600'
+                            },
+                            color: '#374151'
+                        },
+                        grid: {
+                            display: true,
+                            color: 'rgba(0, 0, 0, 0.05)',
+                            drawBorder: false
+                        },
+                        border: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 11,
+                                weight: '600'
+                            },
+                            color: '#374151',
+                            autoSkip: false
+                        },
+                        grid: {
+                            display: false
+                        },
+                        border: {
+                            display: false
+                        }
+                    }
                 },
                 plugins: {
-                    legend: { display: false }
+                    legend: { 
+                        display: false 
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        callbacks: {
+                            title: function(context) {
+                                return context[0].label;
+                            },
+                            label: function(context) {
+                                return 'Total Kasus: ' + context.parsed.x;
+                            }
+                        }
+                    }
+                },
+                layout: {
+                    padding: {
+                        right: 20,
+                        left: 10,
+                        top: 10,
+                        bottom: 10
+                    }
                 }
             }
         });
+        @endif
     </script>
 </x-app-layout>

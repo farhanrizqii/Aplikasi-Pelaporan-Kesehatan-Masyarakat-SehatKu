@@ -7,6 +7,8 @@ use App\Models\Penduduk;
 use App\Models\KategoriPenyakit; 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RiwayatKesehatanExport;
 
 class RiwayatKesehatanController extends Controller
 {
@@ -32,6 +34,17 @@ class RiwayatKesehatanController extends Controller
 
         $riwayats = $query->paginate(10)->withQueryString();
         return view('riwayat_kesehatan.index', compact('riwayats'));
+    }
+
+    /**
+     * Export data riwayat kesehatan ke Excel
+     */
+    public function export()
+    {
+        return Excel::download(
+            new RiwayatKesehatanExport, 
+            'riwayat-kesehatan-' . date('Y-m-d') . '.xlsx'
+        );
     }
 
     /**
